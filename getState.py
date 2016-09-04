@@ -1,11 +1,15 @@
 #!/usr/bin/python
 
+import os
 import sys
 import json
 from pySwitcher import pySwitcher
 
 def main(argv):
-    with open('settings.json') as settings_file:
+    __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+    settingsPath = os.path.join(__location__, 'settings.json')
+
+    with open(settingsPath) as settings_file:
         settings = json.load(settings_file)
 
     assert(settings['username'] != ''), 'missing Username in settings.json'
@@ -13,7 +17,7 @@ def main(argv):
 
     switch = pySwitcher()
     switch.login(settings['username'], settings['password'])
-    
+
     state = switch.getState()
     print state
 
