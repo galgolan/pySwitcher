@@ -20,7 +20,8 @@ switch.turnOff()    # returns True/False to indicate success/failure
 
 Command Line API
 ----------------
-Provided for easy integraion with some home automation servers, such as: https://home-assistant.io/
+Provided for easy integration with some home automation servers, such as: https://home-assistant.io/
+
 Edit settings.json with your username & password. The following scripts are available:
 
 * getState.py - Exit code is 0 when switch is on, non-zero when off.
