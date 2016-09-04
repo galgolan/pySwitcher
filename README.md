@@ -22,8 +22,8 @@ Command Line API
 ----------------
 Provided for easy integration with some home automation servers, such as: https://home-assistant.io/
 
-Edit settings.json with your username & password. The following scripts are available:
+Edit **settings.json** with your username & password. The following scripts are available:
 
-* getState.py - Exit code is 0 when switch is on, non-zero when off.
-* turnOn.py - Exit code is 0 when success, non-zero otherwise.
-* turnOff.py - Exit code is 0 when success, non-zero otherwise.
+* **getState.py** - Exit code is 0 when switch is on, non-zero when off.
+* **turnOn.py** - Exit code is 0 when success, non-zero otherwise.
+* **turnOff.py** - Exit code is 0 when success, non-zero otherwise.
