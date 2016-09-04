@@ -4,7 +4,7 @@
 Required Packages
 -----------------
 * json
-* requests
+* requests - http://docs.python-requests.org/en/master/user/install/#install
 
 Programmatic API
 ----------------
@@ -20,6 +20,7 @@ switch.turnOff()    # returns True/False to indicate success/failure
 
 Command Line API
 ----------------
+Provided for easy integraion with some home automation servers, such as: https://home-assistant.io/
 Edit settings.json with your username & password. The following scripts are available:
 
 * getState.py - Exit code is 0 when switch is on, non-zero when off.
