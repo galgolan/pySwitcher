@@ -1,5 +1,5 @@
 # pySwitcher
-Python API for Switcher - Dud boiler home automation switch
+(Unofficial) Python API for Switcher - Dud boiler home automation switch http://www.switcher.co.il/
 
 Required Packages
 -----------------
