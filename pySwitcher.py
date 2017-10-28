@@ -1,9 +1,9 @@
 import requests
 import json
 
-class pySwitcher(object):
 
-    def __init__(self):        
+class pySwitcher(object):
+    def __init__(self):
         self.token = ''
         self.baseUri = 'http://server.switcher.co.il/Switcher/'
         self.userAgent = 'Switcher/1.0 CFNetwork/758.5.3 Darwin/15.6.0'
@@ -12,11 +12,11 @@ class pySwitcher(object):
         self.switchId = ''
 
     def getSwitch(self):
-        assert(self.token != ''), 'Not logged in!'
+        assert (self.token != ''), 'Not logged in!'
 
-        req = requests.get(self.baseUri + 'appServiceGetSwitches', params={'token':self.token}, headers=self.headers)
+        req = requests.get(self.baseUri + 'appServiceGetSwitches', params={'token': self.token}, headers=self.headers)
         res = json.loads(req.text)
-        if(res['errorCode'] == 0):
+        if (res['errorCode'] == 0):
             switchId = res['switches'][0]
         else:
             switchId = ''
@@ -24,13 +24,15 @@ class pySwitcher(object):
         return switchId
 
     def login(self, username, password):
-        assert(username != ''), 'Invalid Username!'
-        assert(password != ''), 'Invalid Password!'
+        assert (username != ''), 'Invalid Username!'
+        assert (password != ''), 'Invalid Password!'
 
-        payload = {'password': password, 'account_pid': username, 'item_id': 'iPhone_app_id', 'device_info': {'duid':'4B7299E2-2677-43AC-BE40-A3CC5E5F700B','versions':{'software':'iphone_app'}}}
-        req = requests.post(self.baseUri + 'loginApp', data=json.dumps(payload), headers = self.postHeaders)
+        payload = {'password': password, 'account_pid': username, 'item_id': 'iPhone_app_id',
+                   'device_info': {'duid': '4B7299E2-2677-43AC-BE40-A3CC5E5F700B',
+                                   'versions': {'software': 'iphone_app'}}}
+        req = requests.post(self.baseUri + 'loginApp', data=json.dumps(payload), headers=self.postHeaders)
         res = json.loads(req.text)
-        if(res['errorCode'] == 0):
+        if (res['errorCode'] == 0):
             self.token = res['token']
         else:
             self.token = ''
@@ -38,33 +40,44 @@ class pySwitcher(object):
         self.switchId = self.getSwitch()
 
     def getState(self):
-        assert(self.token != ''), 'Not logged in!'
-        assert(self.switchId != ''), 'Cant get switch associated with the user!'
+        assert (self.token != ''), 'Not logged in!'
+        assert (self.switchId != ''), 'Cant get switch associated with the user!'
 
-        serviceParams = {'token':self.token,'switchId':self.switchId}
+        serviceParams = {'token': self.token, 'switchId': self.switchId}
         req = requests.get(self.baseUri + 'appServiceGetSwitchState', params=serviceParams, headers=self.headers)
         res = json.loads(req.text)
-        if(res['errorCode'] == 0):
+        if (res['errorCode'] == 0):
             state = res['state']
         else:
             state = ''
-        
+
         return state
 
     def turnOn(self):
-        assert(self.token != ''), 'Not logged in!'
-        assert(self.switchId != ''), 'Cant get switch associated with the user!'
+        assert (self.token != ''), 'Not logged in!'
+        assert (self.switchId != ''), 'Cant get switch associated with the user!'
 
-        serviceParams = {'token':self.token,'switchId':self.switchId, 'state':'on'}
+        serviceParams = {'token': self.token, 'switchId': self.switchId, 'state': 'on'}
         req = requests.get(self.baseUri + 'appServiceSetSwitchState', params=serviceParams, headers=self.headers)
         res = json.loads(req.text)
         return res['errorCode'] == 0 and res['state'] == 'on'
 
+    def turnOnWithDuration(self, durationMs):
+        assert (self.token != ''), 'Not logged in!'
+        assert (self.switchId != ''), 'Cant get switch associated with the user!'
+        assert (durationMs > 0), 'Time should be non-zero'
+        serviceParams = {'token': self.token, 'switchId': self.switchId, 'state': 'on', 'isManual': "true",
+                         'duration': durationMs}
+        req = requests.get(self.baseUri + 'setSpontaneousEvent', params=serviceParams, headers=self.headers)
+        res = json.loads(req.text)
+        return res['errorCode'] == 0 and res['state'] == 'on'
+        # rp({ url: util.format(ENABLE_DURATION, switcher.token, switcher.switchID, duration_ms), json: true })
+        # ENABLE_DURATION = BASE_URL + "/setSpontaneousEvent?token=%s&switchId=%s&isManual=true&duration=%s"
+
     def turnOff(self):
-        assert(self.token != ''), 'Not logged in!'
-        assert(self.switchId != ''), 'Cant get switch associated with the user!'
-        
-        serviceParams = {'token':self.token,'switchId':self.switchId, 'state':'off'}
+        assert (self.token != ''), 'Not logged in!'
+        assert (self.switchId != ''), 'Cant get switch associated with the user!'
+        serviceParams = {'token': self.token, 'switchId': self.switchId, 'state': 'off'}
         req = requests.get(self.baseUri + 'appServiceSetSwitchState', params=serviceParams, headers=self.headers)
         res = json.loads(req.text)
         return res['errorCode'] == 0 and res['state'] == 'off'
